@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  pokcetserve-dev:
+    build:
+      context: .
+      target: dev
+      args:
+        BUILD_ENV: dev
+    ports:
+      - "8090:8090"
+      - "5173:5173"
+    volumes:
+      - ./backend:/pocketbase
+      - ./frontend/src:/web/src
+    env_file:
+      - .env
+
+  pokcetserve-prod:
+    build:
+      context: .
+      target: prod
+      args:
+        BUILD_ENV: prod
+    ports:
+      - "8090:8090"
+    env_file:
+      - .env
