@@ -4,8 +4,10 @@ import { CardTitle, CardHeader, Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
 import JoinGame from '@/components/JoinGame.vue'
+import PocketBase from 'pocketbase'
 
 const router = useRouter()
+const pb = new PocketBase()
 
 const generateRandomCode = (length: number) => {
 	let result = ''
@@ -19,8 +21,19 @@ const generateRandomCode = (length: number) => {
 	return result
 }
 
-const createGame = () => {
-	// TODO: game creation
+const createGame = async () => {
+	try {
+		const newGameCode = generateRandomCode(6)
+		const game = await pb.collection('games').create({
+			code: newGameCode,
+			status: 'waiting',
+			currentRound: 0
+		})
+
+		router.push(`/host/${newGameCode}`)
+	} catch (error) {
+		console.error(error)
+	}
 }
 </script>
 
