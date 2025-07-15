@@ -10,9 +10,11 @@ interface Player {
 export const useGameStore = defineStore('game', () => {
 	const pb = new PocketBase()
 	const gameId = ref<string | null>(null)
+	const gameCode = ref<string | null>(null)
 	const gameStatus = ref<string | null>(null)
 	const gameRound = ref<number | null>(null)
 	const player = ref<Player>()
+	const players = ref<Player[]>([])
 	const error = ref<string | null>(null)
 
 	const _generateRandomCode = (length: number) => {
@@ -28,16 +30,18 @@ export const useGameStore = defineStore('game', () => {
 	}
 
 	const createGame = async () => {
-		gameId.value = _generateRandomCode(6)
+		gameCode.value = _generateRandomCode(6)
 		gameStatus.value = 'waiting'
 		gameRound.value = 0
 
 		try {
-			await pb.collection('games').create({
-				code: gameId.value,
+			const game = await pb.collection('games').create({
+				code: gameCode.value,
 				status: gameStatus.value,
 				currentRound: gameRound.value,
 			})
+
+			gameId.value = game.id
 		} catch (err) {
 			error.value = (err as Error).message
 			throw err
@@ -62,12 +66,38 @@ export const useGameStore = defineStore('game', () => {
 
 	}
 
+	const init = async () => {
+		try {
+			if (!gameId.value) {
+				throw new Error('gameId isn\'t set')
+			}
+			
+			pb.collection('games').subscribe(gameId.value, (e) => {
+				if (e.action === 'update') {
+					gameStatus.value = e.record.status
+					gameRound.value = e.record.currentRound || 0
+				}
+			})
+
+			pb.collection('players').subscribe('*', (e) => {
+				if (e.action === 'create') {
+					players.value.push(e.record as unknown as Player)
+				}
+			}, { filter: `game = '${gameId.value}'` })
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
 	return {
 		gameId,
+		gameCode,
 		gameStatus,
 		gameRound,
 		createGame,
 		joinGame,
 		player,
+		players,
+		init,
 	}
 })

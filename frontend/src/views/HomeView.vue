@@ -9,9 +9,9 @@ import JoinGame from '@/components/JoinGame.vue'
 const gameStore = useGameStore()
 const router = useRouter()
 
-const createGame = () => {
+const createGame = async () => {
 	try {
-		gameStore.createGame()
+		await gameStore.createGame()
 		router.push(`/host/${gameStore.gameId}`)
 	} catch (error) {
 		console.error(error)
