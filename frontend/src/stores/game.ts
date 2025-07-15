@@ -89,6 +89,19 @@ export const useGameStore = defineStore('game', () => {
 		}
 	}
 
+	const unsubscribe = async () => {
+		try {
+			if (!gameId.value) {
+				throw new Error('gameId isn\'t set')
+			}
+
+			pb.collection('games').unsubscribe(gameId.value)
+			pb.collection('players').unsubscribe('*')
+		} catch (err) {
+			console.error(err)
+		}
+	}
+
 	return {
 		gameId,
 		gameCode,
@@ -99,5 +112,6 @@ export const useGameStore = defineStore('game', () => {
 		player,
 		players,
 		init,
+		unsubscribe,
 	}
 })

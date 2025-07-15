@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 import { Button } from '@/components/ui/button'
 import { useGameStore } from '@/stores/game';
 
@@ -7,6 +7,10 @@ const gameStore = useGameStore()
 
 onMounted(() => {
 	gameStore.init()
+})
+
+onUnmounted(() => {
+	gameStore.unsubscribe()
 })
 </script>
 
