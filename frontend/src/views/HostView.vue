@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue'
 import { Button } from '@/components/ui/button'
-import { useGameStore } from '@/stores/game';
+import { useGameStore } from '@/stores/game'
 
 const gameStore = useGameStore()
 

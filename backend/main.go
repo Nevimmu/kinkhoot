@@ -55,6 +55,8 @@ func main() {
 		Priority: 999, // execute as latest as possible to allow users to provide their own route
 	})
 
+	// TODO: get resuls from url on player creation
+
 	if err := app.Start(); err != nil {
 		log.Fatal(err)
 	}

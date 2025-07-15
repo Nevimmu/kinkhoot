@@ -55,23 +55,21 @@ export const useGameStore = defineStore('game', () => {
 				game: game.id,
 				name: name,
 				url: url,
-				score: 0
+				score: 0,
 			})
 
-			player.value = <Player>{id: createPlayer.id, name: createPlayer.name}
-
+			player.value = <Player>{ id: createPlayer.id, name: createPlayer.name }
 		} catch (err) {
 			console.log(err)
 		}
-
 	}
 
 	const init = async () => {
 		try {
 			if (!gameId.value) {
-				throw new Error('gameId isn\'t set')
+				throw new Error("gameId isn't set")
 			}
-			
+
 			pb.collection('games').subscribe(gameId.value, (e) => {
 				if (e.action === 'update') {
 					gameStatus.value = e.record.status
@@ -79,11 +77,15 @@ export const useGameStore = defineStore('game', () => {
 				}
 			})
 
-			pb.collection('players').subscribe('*', (e) => {
-				if (e.action === 'create') {
-					players.value.push(e.record as unknown as Player)
-				}
-			}, { filter: `game = '${gameId.value}'` })
+			pb.collection('players').subscribe(
+				'*',
+				(e) => {
+					if (e.action === 'create') {
+						players.value.push(e.record as unknown as Player)
+					}
+				},
+				{ filter: `game = '${gameId.value}'` },
+			)
 		} catch (err) {
 			console.log(err)
 		}
@@ -92,7 +94,7 @@ export const useGameStore = defineStore('game', () => {
 	const unsubscribe = async () => {
 		try {
 			if (!gameId.value) {
-				throw new Error('gameId isn\'t set')
+				throw new Error("gameId isn't set")
 			}
 
 			pb.collection('games').unsubscribe(gameId.value)
