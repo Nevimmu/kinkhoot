@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useGameStore } from '@/stores/game'
 import { useRouter } from 'vue-router'
 import { Button } from '@/components/ui/button'
 import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
@@ -10,6 +11,7 @@ import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 
 const router = useRouter()
+const gameStore = useGameStore()
 
 const formSchema = toTypedSchema(
 	z.object({
@@ -25,9 +27,9 @@ const { handleSubmit, isFieldDirty, setFieldValue } = useForm({
 
 const onSubmit = handleSubmit(async (values) => {
 	try {
-		console.log(values)
-		// TODO: join a game
-		// router.push('/')
+		let code = values.pin.join('')
+		await gameStore.joinGame(values.username, values.url, code)
+		router.push(`/player/${code}`)
 	} catch (error) {
 		console.error(error)
 	}
