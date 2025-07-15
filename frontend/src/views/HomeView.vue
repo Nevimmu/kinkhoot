@@ -23,7 +23,7 @@ const createGame = () => {
 	<div class="flex flex-col h-screen w-full items-center justify-center">
 		<Card class="grid gap-2">
 			<CardHeader>
-				<CardTitle class="text-center text-4xl">Kinkoot</CardTitle>
+				<CardTitle class="text-center text-4xl">Kinkhoot</CardTitle>
 			</CardHeader>
 			<CardContent class="grid gap-2">
 				<h2 class="text-lg">Join a game</h2>
