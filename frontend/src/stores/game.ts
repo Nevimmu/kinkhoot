@@ -49,6 +49,32 @@ export const useGameStore = defineStore('game', () => {
 		}
 	}
 
+	const start = async () => {
+		try {
+			// Generate rounds
+			const rounds: Player[] = []
+			for (var p of players.value) {
+				rounds.push(p)
+			}
+	
+			rounds.sort(() => Math.random() - 0.5)
+	
+			let roundNb = 0
+			for (var r of rounds) {
+				roundNb++
+				await pb.collection('rounds').create({
+					roundNumber: roundNb,
+					game: gameId.value,
+					player: r.id,
+				})
+			}
+
+		} catch (err) {
+			console.error(err)
+		}
+
+	}
+
 	const joinGame = async (name: string, url: string, code: string) => {
 		try {
 			const game = await pb.collection('games').getFirstListItem(`code = '${code}'`)
@@ -113,6 +139,7 @@ export const useGameStore = defineStore('game', () => {
 		gameRound,
 		createGame,
 		joinGame,
+		start,
 		player,
 		players,
 		init,
