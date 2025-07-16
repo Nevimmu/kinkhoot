@@ -30,6 +30,7 @@ export const useGameStore = defineStore('game', () => {
 	}
 
 	const createGame = async () => {
+		// TODO: save game data to local storage
 		gameCode.value = _generateRandomCode(6)
 		gameStatus.value = 'waiting'
 		gameRound.value = 0
@@ -65,6 +66,7 @@ export const useGameStore = defineStore('game', () => {
 	}
 
 	const init = async () => {
+		// TODO: load game data from local storage
 		try {
 			if (!gameId.value) {
 				throw new Error("gameId isn't set")

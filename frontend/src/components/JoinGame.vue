@@ -30,6 +30,8 @@ const onSubmit = handleSubmit(async (values) => {
 	try {
 		let code = values.pin.join('')
 		await gameStore.joinGame(values.username, values.url, code)
+
+		// TODO: save player data to local storage
 		router.push(`/player/${code}`)
 	} catch (error) {
 		console.error(error)
