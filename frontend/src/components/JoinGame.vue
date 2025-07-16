@@ -17,7 +17,7 @@ const formSchema = toTypedSchema(
 	z.object({
 		pin: z.array(z.coerce.string()).length(6),
 		username: z.string(),
-		url: z.string().url(),
+		url: z.string().url({message: 'Invalid URL'}).includes('https://bdsmtest.org/r/'),
 	}),
 )
 
@@ -26,6 +26,7 @@ const { handleSubmit, isFieldDirty, setFieldValue } = useForm({
 })
 
 const onSubmit = handleSubmit(async (values) => {
+	// TODO: verify if the game code is valid and if the url return a valid JSON
 	try {
 		let code = values.pin.join('')
 		await gameStore.joinGame(values.username, values.url, code)

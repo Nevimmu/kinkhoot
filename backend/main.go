@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"backend/bdsmrequest"
 	_ "backend/migrations"
 
 	"github.com/pocketbase/pocketbase"
@@ -55,7 +56,22 @@ func main() {
 		Priority: 999, // execute as latest as possible to allow users to provide their own route
 	})
 
-	// TODO: get resuls from url on player creation
+	app.OnRecordAfterCreateSuccess("players").BindFunc(func(e *core.RecordEvent) error {
+		url := e.Record.Get("url")
+		parts := strings.Split(url.(string), "/")
+		code := parts[len(parts)-1]
+
+		jsonData, err := bdsmrequest.GetResult(code)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		e.Record.Set("results", jsonData)
+
+		app.Save(e.Record)
+
+		return e.Next()
+	})
 
 	if err := app.Start(); err != nil {
 		log.Fatal(err)

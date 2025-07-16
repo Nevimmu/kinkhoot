@@ -24,6 +24,7 @@ RUN if [ "$BUILD_ENV" = "prod" ]; then \
 # Dev stage
 FROM golang:1.24-alpine AS dev
 ENV BUILD=dev
+RUN apk add --no-cache chromium udev ttf-freefont
 WORKDIR /pocketbase
 RUN apk add --no-cache nodejs npm
 RUN go install github.com/air-verse/air@latest
@@ -34,6 +35,7 @@ CMD ["sh", "-c", "air serve --http=0.0.0.0:8090 & cd /web && npm run dev -- --ho
 
 # Prod stage
 FROM golang:1.24-alpine AS prod
+RUN apk add --no-cache chromium udev ttf-freefont
 WORKDIR /pocketbase
 COPY --from=backend-builder /pocketbase/backend .
 COPY --from=frontend-builder /web/dist /pocketbase/pb_public
