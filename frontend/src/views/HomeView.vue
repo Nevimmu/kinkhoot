@@ -12,7 +12,7 @@ const router = useRouter()
 const createGame = async () => {
 	try {
 		await gameStore.createGame()
-		router.push(`/host/${gameStore.gameId}`)
+		router.push(`/host/${gameStore.gameCode}`)
 	} catch (error) {
 		console.error(error)
 	}
