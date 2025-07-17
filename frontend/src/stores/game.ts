@@ -7,12 +7,19 @@ interface Player {
 	name: string
 }
 
+interface Round {
+	number: number
+	player: Player
+	results: string
+}
+
 export const useGameStore = defineStore('game', () => {
 	const pb = new PocketBase()
 	const gameId = ref<string | null>(null)
 	const gameCode = ref<string | null>(null)
 	const gameStatus = ref<string | null>(null)
-	const gameRound = ref<number | null>(null)
+	const gameRound = ref<number>(0)
+	const roundData = ref<Round | null>()
 	const player = ref<Player>()
 	const players = ref<Player[]>([])
 	const error = ref<string | null>(null)
@@ -60,6 +67,10 @@ export const useGameStore = defineStore('game', () => {
 
 	const start = async () => {
 		try {
+			if (!gameId.value) {
+				throw new Error("gameId isn't set")
+			}
+
 			// Generate rounds
 			const rounds: Player[] = []
 			for (var p of players.value) {
@@ -78,10 +89,34 @@ export const useGameStore = defineStore('game', () => {
 				})
 			}
 
+			gameStatus.value = 'playing'
+			await pb.collection('games').update(gameId.value, {'status': gameStatus.value})
+
+			newRound()
+
 		} catch (err) {
 			console.error(err)
 		}
 
+	}
+
+	const newRound = async () => {
+		if (gameRound.value == players.value.length) {
+			// TODO: handle end of the game
+		}
+
+		try {
+			// Fetch the next round
+			const round = await pb.collection('rounds').getFirstListItem(
+				`roundNumber = "${gameRound.value + 1}" && game = "${gameId.value}"`, 
+				{expand: 'player'}
+			)
+			roundData.value = {number: round.roundNumber, player: round.player, results: round.expand?.player.results}
+			gameRound.value++
+
+		} catch (err) {
+			console.log(err)
+		}
 	}
 
 	const joinGame = async (name: string, url: string, code: string) => {
@@ -150,6 +185,8 @@ export const useGameStore = defineStore('game', () => {
 		checkGameCode,
 		joinGame,
 		start,
+		newRound,
+		roundData,
 		player,
 		players,
 		init,
