@@ -7,10 +7,15 @@ interface Player {
 	name: string
 }
 
+interface Result {
+	name: string,
+	score: number
+}
+
 interface Round {
 	number: number
 	player: Player
-	results: string
+	results: Result[]
 }
 
 export const useGameStore = defineStore('game', () => {
