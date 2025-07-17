@@ -66,7 +66,6 @@ export const useGameStore = defineStore('game', () => {
 	}
 
 	const init = async () => {
-		// TODO: load game data from local storage
 		try {
 			if (!gameId.value) {
 				throw new Error("gameId isn't set")
