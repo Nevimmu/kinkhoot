@@ -65,10 +65,16 @@ export const useRoundStore = defineStore('round', () => {
 		}
 	}
 
+	const $reset = () => {
+		gameRound.value = 0
+		roundData.value = null
+	}
+
 	return {
 		gameRound,
 		roundData,
 		start,
 		newRound,
+		$reset,
 	}
 }, { persist: true })

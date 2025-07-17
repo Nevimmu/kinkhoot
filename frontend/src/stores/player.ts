@@ -53,11 +53,17 @@ export const usePlayerStore = defineStore('player', () => {
 		}
 	}
 
+	const $reset = () => {
+		player.value = undefined
+		players.value = []
+	}
+
 	return {
 		player,
 		players,
 		joinGame,
 		init,
 		unsubscribe,
+		$reset,
 	}
 }, { persist: true })

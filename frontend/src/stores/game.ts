@@ -1,8 +1,12 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { usePlayerStore } from './player'
+import { useRoundStore } from './round'
 import { pb } from '@/services/pocketbase'
 
 export const useGameStore = defineStore('game', () => {
+	const playerStore = usePlayerStore()
+	const roundStore = useRoundStore()
 	const gameId = ref<string | null>(null)
 	const gameCode = ref<string | null>(null)
 	const gameStatus = ref<string | null>(null)
@@ -30,7 +34,8 @@ export const useGameStore = defineStore('game', () => {
 	}
 
 	const createGame = async () => {
-		// TODO: save game data to local storage
+		playerStore.$reset()
+		roundStore.$reset()
 		gameCode.value = _generateRandomCode(6)
 		gameStatus.value = 'waiting'
 
