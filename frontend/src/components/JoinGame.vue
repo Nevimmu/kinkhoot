@@ -9,24 +9,29 @@ import { PinInput, PinInputGroup, PinInputSlot } from '@/components/ui/pin-input
 import { ErrorMessage, useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
+import { Loader2 } from 'lucide-vue-next'
 
 const router = useRouter()
 const gameStore = useGameStore()
+const disableJoin = ref(false)
 
 const formSchema = toTypedSchema(
 	z.object({
-		pin: z.array(z.coerce.string()).length(6),
+		pin: z.array(z.coerce.string()).length(6).refine(async (pin: string[]) => {
+			const isValid = await gameStore.checkGameCode(pin.join(''))
+			return isValid
+		}),
 		username: z.string(),
 		url: z.string().url({message: 'Invalid URL'}).includes('https://bdsmtest.org/r/'),
 	}),
 )
 
-const { handleSubmit, isFieldDirty, setFieldValue } = useForm({
+const { handleSubmit, isFieldDirty, setFieldValue, meta } = useForm({
 	validationSchema: formSchema,
 })
 
 const onSubmit = handleSubmit(async (values) => {
-	// TODO: verify if the game code is valid and if the url return a valid JSON
+	disableJoin.value = true
 	try {
 		let code = values.pin.join('')
 		await gameStore.joinGame(values.username, values.url, code)
@@ -36,6 +41,7 @@ const onSubmit = handleSubmit(async (values) => {
 	} catch (error) {
 		console.error(error)
 	}
+	disableJoin.value = false
 })
 </script>
 
@@ -83,6 +89,9 @@ const onSubmit = handleSubmit(async (values) => {
 				</FormControl>
 			</FormItem>
 		</FormField>
-		<Button class="w-full">Join</Button>
+		<Button class="w-full" :disabled="disableJoin || !meta.valid">
+			<Loader2 v-if="disableJoin" class="mr-2 animate-spin"/>
+			Join
+		</Button>
 	</form>
 </template>

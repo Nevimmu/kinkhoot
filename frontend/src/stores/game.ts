@@ -29,6 +29,15 @@ export const useGameStore = defineStore('game', () => {
 		return result
 	}
 
+	const checkGameCode = async (code: string) => {
+		try {
+			await pb.collection('games').getFirstListItem(`code="${code}"`)
+			return true
+		} catch (err) {
+			return false
+		}
+	}
+
 	const createGame = async () => {
 		// TODO: save game data to local storage
 		gameCode.value = _generateRandomCode(6)
@@ -138,6 +147,7 @@ export const useGameStore = defineStore('game', () => {
 		gameStatus,
 		gameRound,
 		createGame,
+		checkGameCode,
 		joinGame,
 		start,
 		player,
