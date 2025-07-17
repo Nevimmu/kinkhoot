@@ -99,4 +99,4 @@ export const useGameStore = defineStore('game', () => {
 		init,
 		unsubscribe,
 	}
-})
+}, { persist: true })

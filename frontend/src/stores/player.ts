@@ -60,4 +60,4 @@ export const usePlayerStore = defineStore('player', () => {
 		init,
 		unsubscribe,
 	}
-})
+}, { persist: true })

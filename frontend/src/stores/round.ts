@@ -71,4 +71,4 @@ export const useRoundStore = defineStore('round', () => {
 		start,
 		newRound,
 	}
-})
+}, { persist: true })
