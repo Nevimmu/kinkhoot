@@ -76,9 +76,9 @@ export const useGameStore = defineStore('game', () => {
 			for (var p of players.value) {
 				rounds.push(p)
 			}
-	
+
 			rounds.sort(() => Math.random() - 0.5)
-	
+
 			let roundNb = 0
 			for (var r of rounds) {
 				roundNb++
@@ -90,14 +90,12 @@ export const useGameStore = defineStore('game', () => {
 			}
 
 			gameStatus.value = 'playing'
-			await pb.collection('games').update(gameId.value, {'status': gameStatus.value})
+			await pb.collection('games').update(gameId.value, { status: gameStatus.value })
 
 			newRound()
-
 		} catch (err) {
 			console.error(err)
 		}
-
 	}
 
 	const newRound = async () => {
@@ -107,13 +105,17 @@ export const useGameStore = defineStore('game', () => {
 
 		try {
 			// Fetch the next round
-			const round = await pb.collection('rounds').getFirstListItem(
-				`roundNumber = "${gameRound.value + 1}" && game = "${gameId.value}"`, 
-				{expand: 'player'}
-			)
-			roundData.value = {number: round.roundNumber, player: round.player, results: round.expand?.player.results}
+			const round = await pb
+				.collection('rounds')
+				.getFirstListItem(`roundNumber = "${gameRound.value + 1}" && game = "${gameId.value}"`, {
+					expand: 'player',
+				})
+			roundData.value = {
+				number: round.roundNumber,
+				player: round.player,
+				results: round.expand?.player.results,
+			}
 			gameRound.value++
-
 		} catch (err) {
 			console.log(err)
 		}

@@ -17,12 +17,15 @@ const disableJoin = ref(false)
 
 const formSchema = toTypedSchema(
 	z.object({
-		pin: z.array(z.coerce.string()).length(6).refine(async (pin: string[]) => {
-			const isValid = await gameStore.checkGameCode(pin.join(''))
-			return isValid
-		}),
+		pin: z
+			.array(z.coerce.string())
+			.length(6)
+			.refine(async (pin: string[]) => {
+				const isValid = await gameStore.checkGameCode(pin.join(''))
+				return isValid
+			}),
 		username: z.string(),
-		url: z.string().url({message: 'Invalid URL'}).includes('https://bdsmtest.org/r/'),
+		url: z.string().url({ message: 'Invalid URL' }).includes('https://bdsmtest.org/r/'),
 	}),
 )
 
@@ -90,7 +93,7 @@ const onSubmit = handleSubmit(async (values) => {
 			</FormItem>
 		</FormField>
 		<Button class="w-full" :disabled="disableJoin || !meta.valid">
-			<Loader2 v-if="disableJoin" class="mr-2 animate-spin"/>
+			<Loader2 v-if="disableJoin" class="mr-2 animate-spin" />
 			Join
 		</Button>
 	</form>
