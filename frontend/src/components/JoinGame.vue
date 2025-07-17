@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useGameStore } from '@/stores/game'
+import { usePlayerStore } from '@/stores/player'
 import { useRouter } from 'vue-router'
 import { Button } from '@/components/ui/button'
 import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
@@ -13,6 +14,7 @@ import { Loader2 } from 'lucide-vue-next'
 
 const router = useRouter()
 const gameStore = useGameStore()
+const playerStore = usePlayerStore()
 const disableJoin = ref(false)
 
 const formSchema = toTypedSchema(
@@ -37,7 +39,7 @@ const onSubmit = handleSubmit(async (values) => {
 	disableJoin.value = true
 	try {
 		let code = values.pin.join('')
-		await gameStore.joinGame(values.username, values.url, code)
+		await playerStore.joinGame(values.username, values.url, code)
 
 		// TODO: save player data to local storage
 		router.push(`/player/${code}`)
