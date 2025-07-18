@@ -33,11 +33,28 @@ export const usePlayerStore = defineStore(
 					throw new Error("gameId isn't set")
 				}
 
+				const records = await pb
+					.collection('players')
+					.getFullList({ filter: `game = '${gameStore.gameId}'` })
+				players.value = records as unknown as Player[]
+
 				pb.collection('players').subscribe(
 					'*',
 					(e) => {
 						if (e.action === 'create') {
 							players.value.push(e.record as unknown as Player)
+						}
+						if (e.action === 'update') {
+							const i = players.value.findIndex((p) => p.id === e.record.id)
+							if (i !== -1) {
+								players.value[i] = e.record as unknown as Player
+							}
+						}
+						if (e.action === 'delete') {
+							const i = players.value.findIndex((p) => p.id === e.record.id)
+							if (i !== -1) {
+								players.value.splice(i, 1)
+							}
 						}
 					},
 					{ filter: `game = '${gameStore.gameId}'` },
