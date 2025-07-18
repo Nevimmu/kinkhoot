@@ -2,6 +2,9 @@
 import { onMounted, onUnmounted } from 'vue'
 import { useGameStore } from '@/stores/game'
 import { usePlayerStore } from '@/stores/player'
+import Waiting from '@/components/player/Waiting.vue'
+import Playing from '@/components/player/Playing.vue'
+import Finished from '@/components/player/Finished.vue'
 
 const playerStore = usePlayerStore()
 const gameStore = useGameStore()
@@ -18,8 +21,16 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div class="flex flex-1 flex-col p-5 w-full h-screen items-center justify-center">
-		<span class="text-center text-xl">Waiting for game to start</span>
-		<span class="text-center">{{ playerStore.player?.name || 'Player' }}</span>
+	<div v-if="gameStore.gameStatus === 'waiting'">
+		<Waiting />
+	</div>
+	<div v-else-if="gameStore.gameStatus === 'playing'">
+		<Playing />
+	</div>
+	<div v-else-if="gameStore.gameStatus === 'finished'">
+		<Finished />
+	</div>
+	<div v-else class="text-center">
+		<p>Something went wrong</p>
 	</div>
 </template>
