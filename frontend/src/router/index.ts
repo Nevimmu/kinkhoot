@@ -15,7 +15,7 @@ const router = createRouter({
 			},
 		},
 		{
-			path: '/host/:gameID',
+			path: '/host/:gameCode',
 			name: 'host',
 			component: HostView,
 			meta: {
@@ -23,7 +23,7 @@ const router = createRouter({
 			},
 		},
 		{
-			path: '/player/:gameID',
+			path: '/player/:gameCode',
 			name: 'player',
 			component: PlayerView,
 			meta: {
