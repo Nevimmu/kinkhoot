@@ -28,7 +28,10 @@ export const useGameStore = defineStore(
 
 		const checkGameCode = async (code: string) => {
 			try {
-				await pb.collection('games').getFirstListItem(`code="${code}"`)
+				const game = await pb.collection('games').getFirstListItem(`code="${code}"`)
+				gameId.value = game.id
+				gameCode.value = game.code
+				gameStatus.value = game.status
 				return true
 			} catch (err) {
 				return false
