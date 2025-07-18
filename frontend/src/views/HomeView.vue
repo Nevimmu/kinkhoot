@@ -1,13 +1,27 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { onMounted } from 'vue'
 import { CardTitle, CardHeader, Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Button } from '@/components/ui/button'
+import { toast } from 'vue-sonner'
 import { useGameStore } from '@/stores/game'
+import { useNotificationStore } from '@/stores/notification'
 import JoinGame from '@/components/JoinGame.vue'
 
 const gameStore = useGameStore()
 const router = useRouter()
+const notificationStore = useNotificationStore()
+
+onMounted(() => {
+	if (notificationStore.message) {
+		toast.error('Error', {description: notificationStore.message})
+		
+		setTimeout(() => {
+			notificationStore.clearNotification()
+		}, 5000) // Clear after 5 seconds
+	}
+})
 
 const createGame = async () => {
 	try {
