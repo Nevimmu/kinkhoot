@@ -15,8 +15,8 @@ const notificationStore = useNotificationStore()
 
 onMounted(() => {
 	if (notificationStore.message) {
-		toast.error('Error', {description: notificationStore.message})
-		
+		toast.error('Error', { description: notificationStore.message })
+
 		setTimeout(() => {
 			notificationStore.clearNotification()
 		}, 5000) // Clear after 5 seconds

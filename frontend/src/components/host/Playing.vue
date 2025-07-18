@@ -6,7 +6,7 @@ const roundStore = useRoundStore()
 </script>
 
 <template>
-  <div class="w-lg">
-    <Results :results="roundStore.roundData?.results" />
-  </div>
+	<div class="w-lg">
+		<Results :results="roundStore.roundData?.results" />
+	</div>
 </template>

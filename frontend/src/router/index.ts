@@ -1,11 +1,20 @@
-import { createRouter, createWebHistory, type NavigationGuardNext, type RouteLocationNormalized } from 'vue-router'
+import {
+	createRouter,
+	createWebHistory,
+	type NavigationGuardNext,
+	type RouteLocationNormalized,
+} from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import HostView from '@/views/HostView.vue'
 import PlayerView from '@/views/PlayerView.vue'
 import { useGameStore } from '@/stores/game'
 import { useNotificationStore } from '@/stores/notification'
 
-const validateGameCode = async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+const validateGameCode = async (
+	to: RouteLocationNormalized,
+	from: RouteLocationNormalized,
+	next: NavigationGuardNext,
+) => {
 	const gameStore = useGameStore()
 	const notificationStore = useNotificationStore()
 	const gameCode = to.params.gameCode as string

@@ -5,6 +5,6 @@ import 'vue-sonner/style.css'
 </script>
 
 <template>
-	<Toaster rich-colors/>
+	<Toaster rich-colors />
 	<RouterView />
 </template>

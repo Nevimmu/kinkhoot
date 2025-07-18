@@ -4,7 +4,7 @@ export interface Player {
 }
 
 export interface Result {
-	name: string,
+	name: string
 	score: number
 }
 
