@@ -1,24 +1,19 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { onMounted, onUnmounted } from 'vue'
 import { useGameStore } from '@/stores/game'
 import { usePlayerStore } from '@/stores/player'
-import { useNotificationStore } from '@/stores/notification'
 
 const playerStore = usePlayerStore()
 const gameStore = useGameStore()
-const router = useRouter()
-const route = useRoute()
-const notificationStore = useNotificationStore()
 
 onMounted(async () => {
-	const gameCode = route.params.gameCode as string
-	if (!gameCode || !(await gameStore.checkGameCode(gameCode))) {
-		notificationStore.setNotification("Invalid game code or game doesn't exist.")
-		router.push('/')
-		return
-	}
-	gameStore.gameCode = gameCode
+	gameStore.init()
+	playerStore.init()
+})
+
+onUnmounted(() => {
+	gameStore.unsubscribe()
+	playerStore.unsubscribe()
 })
 </script>
 
