@@ -38,9 +38,8 @@ export const useVoteStore = defineStore('vote', () => {
 				}
 			}
 
-			console.log(nbVotes, playerStore.players.length)
 			if (nbVotes === playerStore.players.length) {
-				console.log('Everyone voted!')
+				roundStore.newRound()
 			}
 		} catch (err) {
 			console.log(err)
@@ -57,7 +56,12 @@ export const useVoteStore = defineStore('vote', () => {
 				'*',
 				(e) => {
 					if (e.action === 'create') {
-						votes.value?.push(e.record as unknown as Vote)
+						const vote: Vote = {
+							round: e.record.round,
+							voter: e.record.voter,
+							voted_for: e.record.voted_for
+						}
+						votes.value?.push(vote)
 						_checkRoundVotes()
 					}
 				},
