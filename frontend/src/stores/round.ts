@@ -88,10 +88,7 @@ export const useRoundStore = defineStore(
 					const round = await pb
 						.collection('rounds')
 						.getFirstListItem(
-							`roundNumber = "${gameStore.game.currentRound}" && game = "${gameStore.game.id}"`,
-							{
-								expand: 'player',
-							},
+							`roundNumber = "${gameStore.game.currentRound}" && game = "${gameStore.game.id}"`
 						)
 					roundData.value = {
 						number: round.roundNumber,
