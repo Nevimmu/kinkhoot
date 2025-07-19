@@ -9,15 +9,16 @@ export interface Result {
 }
 
 export interface Round {
+	id: string
 	number: number
 	player: Player
 	results: Result[]
 }
 
 export interface Vote {
-	voterId: string
-	votedForId: string
-	roundId: string
+	voter: string
+	voted_for: string
+	round: string
 }
 
 export interface Game {

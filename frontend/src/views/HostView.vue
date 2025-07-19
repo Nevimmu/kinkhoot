@@ -12,39 +12,41 @@ const playerStore = usePlayerStore()
 const roundStore = useRoundStore()
 
 onMounted(() => {
-  gameStore.init()
-  playerStore.init()
+	gameStore.init()
+	playerStore.init()
+	roundStore.init()
 })
 
 onUnmounted(() => {
-  gameStore.unsubscribe()
-  playerStore.unsubscribe()
+	gameStore.unsubscribe()
+	playerStore.unsubscribe()
+	roundStore.unsubscribe()
 })
 
 const startGame = async () => {
-  try {
-    await gameStore.start()
-    await roundStore.start()
-    await roundStore.newRound()
-  } catch (error) {
-    console.error(error)
-  }
+	try {
+		await gameStore.start()
+		await roundStore.start()
+		await roundStore.newRound()
+	} catch (error) {
+		console.error(error)
+	}
 }
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col p-5 gap-4 w-full items-center justify-center">
-    <div v-if="gameStore.game?.status === 'waiting'">
-      <Waiting @start-game="startGame" />
-    </div>
-    <div v-else-if="gameStore.game?.status === 'playing'">
-      <Playing />
-    </div>
-    <div v-else-if="gameStore.game?.status === 'finished'">
-      <Finished />
-    </div>
-    <div v-else class="text-center">
-      <p>Something went wrong</p>
-    </div>
-  </div>
+	<div class="flex flex-1 flex-col p-5 gap-4 w-full items-center justify-center">
+		<div v-if="gameStore.game?.status === 'waiting'">
+			<Waiting @start-game="startGame" />
+		</div>
+		<div v-else-if="gameStore.game?.status === 'playing'">
+			<Playing />
+		</div>
+		<div v-else-if="gameStore.game?.status === 'finished'">
+			<Finished />
+		</div>
+		<div v-else class="text-center">
+			<p>Something went wrong</p>
+		</div>
+	</div>
 </template>
