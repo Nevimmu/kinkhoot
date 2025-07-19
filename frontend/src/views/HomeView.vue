@@ -26,7 +26,7 @@ onMounted(() => {
 const createGame = async () => {
 	try {
 		await gameStore.createGame()
-		router.push(`/host/${gameStore.gameCode}`)
+		router.push(`/host/${gameStore.game?.code}`)
 	} catch (error) {
 		console.error(error)
 	}

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 import { pb } from '@/services/pocketbase'
 import type { Player } from '@/types'
 import { useGameStore } from './game'
+import { useRoundStore } from './round'
 
 export const usePlayerStore = defineStore(
 	'player',
@@ -10,8 +11,12 @@ export const usePlayerStore = defineStore(
 		const player = ref<Player>()
 		const players = ref<Player[]>([])
 		const gameStore = useGameStore()
+		const playerStore = usePlayerStore()
+		const roundStore = useRoundStore()
 
 		const joinGame = async (name: string, url: string, code: string) => {
+			playerStore.$reset()
+			roundStore.$reset()
 			try {
 				const game = await pb.collection('games').getFirstListItem(`code = '${code}'`)
 				const createdPlayer = await pb.collection('players').create({
@@ -29,13 +34,13 @@ export const usePlayerStore = defineStore(
 
 		const init = async () => {
 			try {
-				if (!gameStore.gameId) {
+				if (!gameStore.game?.id) {
 					throw new Error("gameId isn't set")
 				}
 
 				const records = await pb
 					.collection('players')
-					.getFullList({ filter: `game = '${gameStore.gameId}'` })
+					.getFullList({ filter: `game = '${gameStore.game?.id}'` })
 				players.value = records as unknown as Player[]
 
 				pb.collection('players').subscribe(
@@ -57,7 +62,7 @@ export const usePlayerStore = defineStore(
 							}
 						}
 					},
-					{ filter: `game = '${gameStore.gameId}'` },
+					{ filter: `game = '${gameStore.game?.id}'` },
 				)
 			} catch (err) {
 				console.log(err)

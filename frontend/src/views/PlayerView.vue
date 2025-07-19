@@ -21,13 +21,13 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div v-if="gameStore.gameStatus === 'waiting'">
+	<div v-if="gameStore.game?.status === 'waiting'">
 		<Waiting />
 	</div>
-	<div v-else-if="gameStore.gameStatus === 'playing'">
+	<div v-else-if="gameStore.game?.status === 'playing'">
 		<Playing />
 	</div>
-	<div v-else-if="gameStore.gameStatus === 'finished'">
+	<div v-else-if="gameStore.game?.status === 'finished'">
 		<Finished />
 	</div>
 	<div v-else class="text-center">

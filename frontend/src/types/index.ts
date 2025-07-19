@@ -13,3 +13,16 @@ export interface Round {
 	player: Player
 	results: Result[]
 }
+
+export interface Vote {
+	voterId: string
+	votedForId: string
+	roundId: string
+}
+
+export interface Game {
+	id: string
+	code: string
+	status: string
+	currentRound: number
+}

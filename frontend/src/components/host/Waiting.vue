@@ -16,7 +16,7 @@ const handleStartGame = () => {
 <template>
 	<div class="flex flex-col items-center gap-2">
 		<span class="text-center text-xl">Game code:</span>
-		<span class="text-center font-bold text-7xl">{{ gameStore.gameCode }}</span>
+		<span class="text-center font-bold text-7xl">{{ gameStore.game?.code }}</span>
 		<Button @click="handleStartGame" class="w-xs" :disabled="playerStore.players.length < 2">
 			Start the game
 		</Button>

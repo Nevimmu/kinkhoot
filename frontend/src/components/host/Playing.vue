@@ -6,6 +6,7 @@ const roundStore = useRoundStore()
 </script>
 
 <template>
+	<span class="text-center text-xl">Round {{ roundStore.gameRound }} </span>
 	<div class="w-lg">
 		<Results :results="roundStore.roundData?.results" />
 	</div>

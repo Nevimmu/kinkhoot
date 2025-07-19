@@ -3,15 +3,14 @@ import { defineStore } from 'pinia'
 import { usePlayerStore } from './player'
 import { useRoundStore } from './round'
 import { pb } from '@/services/pocketbase'
+import type { Game } from '@/types'
 
 export const useGameStore = defineStore(
 	'game',
 	() => {
 		const playerStore = usePlayerStore()
 		const roundStore = useRoundStore()
-		const gameId = ref<string | null>(null)
-		const gameCode = ref<string | null>(null)
-		const gameStatus = ref<string | null>(null)
+		const game = ref<Game | null>(null)
 		const error = ref<string | null>(null)
 
 		const _generateRandomCode = (length: number) => {
@@ -28,10 +27,8 @@ export const useGameStore = defineStore(
 
 		const checkGameCode = async (code: string) => {
 			try {
-				const game = await pb.collection('games').getFirstListItem(`code="${code}"`)
-				gameId.value = game.id
-				gameCode.value = game.code
-				gameStatus.value = game.status
+				const record = await pb.collection('games').getFirstListItem(`code="${code}"`)
+				game.value = record as unknown as Game
 				return true
 			} catch (err) {
 				return false
@@ -41,16 +38,17 @@ export const useGameStore = defineStore(
 		const createGame = async () => {
 			playerStore.$reset()
 			roundStore.$reset()
-			gameCode.value = _generateRandomCode(6)
-			gameStatus.value = 'waiting'
+
+			const newGameCode = _generateRandomCode(6)
 
 			try {
-				const game = await pb.collection('games').create({
-					code: gameCode.value,
-					status: gameStatus.value,
+				const record = await pb.collection('games').create({
+					code: newGameCode,
+					status: 'waiting',
+					currentRound: 0,
 				})
 
-				gameId.value = game.id
+				game.value = record as unknown as Game
 			} catch (err) {
 				error.value = (err as Error).message
 				throw err
@@ -59,12 +57,11 @@ export const useGameStore = defineStore(
 
 		const start = async () => {
 			try {
-				if (!gameId.value) {
+				if (!game.value?.id) {
 					throw new Error("gameId isn't set")
 				}
 
-				gameStatus.value = 'playing'
-				await pb.collection('games').update(gameId.value, { status: gameStatus.value })
+				await pb.collection('games').update(game.value.id, { status: 'playing' })
 			} catch (err) {
 				console.error(err)
 			}
@@ -72,13 +69,13 @@ export const useGameStore = defineStore(
 
 		const init = async () => {
 			try {
-				if (!gameId.value) {
+				if (!game.value?.id) {
 					throw new Error("gameId isn't set")
 				}
 
-				pb.collection('games').subscribe(gameId.value, (e) => {
+				pb.collection('games').subscribe(game.value.id, (e) => {
 					if (e.action === 'update') {
-						gameStatus.value = e.record.status
+						game.value = e.record as unknown as Game
 					}
 				})
 			} catch (err) {
@@ -88,20 +85,18 @@ export const useGameStore = defineStore(
 
 		const unsubscribe = async () => {
 			try {
-				if (!gameId.value) {
+				if (!game.value?.id) {
 					throw new Error("gameId isn't set")
 				}
 
-				pb.collection('games').unsubscribe(gameId.value)
+				pb.collection('games').unsubscribe(game.value.id)
 			} catch (err) {
 				console.error(err)
 			}
 		}
 
 		return {
-			gameId,
-			gameCode,
-			gameStatus,
+			game,
 			createGame,
 			checkGameCode,
 			start,
