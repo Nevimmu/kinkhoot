@@ -93,6 +93,9 @@ export const useRoundStore = defineStore('round', () => {
 						.collection('rounds')
 						.getFirstListItem(
 							`roundNumber = "${gameStore.game.currentRound}" && game = "${gameStore.game.id}"`,
+							{
+								expand: 'player',
+							},
 						)
 					roundData.value = {
 						id: round.id,
