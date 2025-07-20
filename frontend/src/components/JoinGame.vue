@@ -95,7 +95,7 @@ const onSubmit = handleSubmit(async (values) => {
 		</FormField>
 		<Button class="w-full" :disabled="disableJoin || !meta.valid">
 			<Loader2 v-if="disableJoin" class="mr-2 animate-spin" />
-			Join
+			<span v-if="!disableJoin">Join</span>
 		</Button>
 	</form>
 </template>
