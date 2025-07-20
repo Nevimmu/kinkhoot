@@ -1,6 +1,7 @@
 export interface Player {
 	id: string
 	name: string
+	score: number
 	has_voted: boolean
 }
 
@@ -12,7 +13,7 @@ export interface Result {
 export interface Round {
 	id: string
 	number: number
-	player: Player
+	player: string
 	results: Result[]
 }
 

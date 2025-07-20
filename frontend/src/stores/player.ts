@@ -25,7 +25,7 @@ export const usePlayerStore = defineStore(
 					score: 0,
 				})
 
-				player.value = <Player>{ id: createdPlayer.id, name: createdPlayer.name, has_voted: false }
+				player.value = <Player>{ id: createdPlayer.id, name: createdPlayer.name, score: 0, has_voted: false }
 			} catch (err) {
 				console.log(err)
 			}

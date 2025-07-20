@@ -42,6 +42,24 @@ export const useVoteStore = defineStore('vote', () => {
 		}
 	}
 
+	const _checkVotes = async () => {
+		if (!votes.value) return
+		
+		for (const v of votes.value) {
+			if (v.round === roundStore.roundData?.id) {
+				if (v.voted_for === roundStore.roundData.player) {
+					const _player = playerStore.players.find(i => i.id === v.voter)
+					console.log(_player)
+					if (!_player) return
+					await pb.collection('players').update(v.voter, {
+						score: _player?.score + 1
+					})
+				}
+			}
+		}
+
+	}
+
 	const _checkRoundVotes = async () => {
 		try {
 			if (!votes.value) return
@@ -55,7 +73,7 @@ export const useVoteStore = defineStore('vote', () => {
 			}
 
 			if (nbVotes === playerStore.players.length) {
-				// Reset the votes
+				await _checkVotes()
 				await _resetHasVoted()
 				roundStore.newRound()
 			}
