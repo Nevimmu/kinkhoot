@@ -27,8 +27,13 @@ export const usePlayerStore = defineStore(
 
 				player.value = <Player>{ id: createdPlayer.id, name: createdPlayer.name, score: 0, has_voted: false }
 			} catch (err) {
-				console.log(err)
+				console.error(err)
 			}
+		}
+
+		const checkPlayerName = async (name: string, code: string) => {
+			const game = await pb.collection('games').getFirstListItem(`code = '${code}'`)
+			return await pb.collection('players').getFirstListItem(`game = '${game.id}' && name = '${name}'`);
 		}
 
 		const init = async () => {
@@ -88,6 +93,7 @@ export const usePlayerStore = defineStore(
 			player,
 			players,
 			joinGame,
+			checkPlayerName,
 			init,
 			unsubscribe,
 			$reset,

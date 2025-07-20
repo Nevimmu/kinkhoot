@@ -42,6 +42,12 @@ const onSubmit = handleSubmit(async (values) => {
 			return
 		}
 
+		const isNameValid = await playerStore.checkPlayerName(values.username, code)
+		if (isNameValid) {
+			setFieldError('username', 'Name is already chosen')
+			return
+		}
+
 		await playerStore.joinGame(values.username, values.url, code)
 
 		router.push(`/player/${code}`)
