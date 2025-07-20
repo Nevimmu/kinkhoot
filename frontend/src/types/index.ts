@@ -1,6 +1,7 @@
 export interface Player {
 	id: string
 	name: string
+	has_voted: boolean
 }
 
 export interface Result {

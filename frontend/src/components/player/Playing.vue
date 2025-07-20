@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { Button } from '@/components/ui/button'
 import { usePlayerStore } from '@/stores/player'
 import { useRoundStore } from '@/stores/round'
@@ -8,8 +8,6 @@ import { useVoteStore } from '@/stores/vote'
 const playerStore = usePlayerStore()
 const roundStore = useRoundStore()
 const voteStore = useVoteStore()
-
-const hasVoted = ref(false)
 
 onMounted(() => {
 	playerStore.init()
@@ -24,7 +22,6 @@ onUnmounted(() => {
 const vote = (playerId: string) => {
 	if (playerStore.player && roundStore.roundData) {
 		voteStore.createVote(playerId)
-		hasVoted.value = true
 	}
 }
 </script>
@@ -36,7 +33,7 @@ const vote = (playerId: string) => {
 			@click="vote(p.id)"
 			v-for="p in playerStore.players"
 			:key="p.name"
-			:disabled="hasVoted"
+			:disabled="playerStore.player?.has_voted"
 			>{{ p.name }}</Button
 		>
 	</div>

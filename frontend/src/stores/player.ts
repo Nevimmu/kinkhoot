@@ -11,11 +11,10 @@ export const usePlayerStore = defineStore(
 		const player = ref<Player>()
 		const players = ref<Player[]>([])
 		const gameStore = useGameStore()
-		const playerStore = usePlayerStore()
 		const roundStore = useRoundStore()
 
 		const joinGame = async (name: string, url: string, code: string) => {
-			playerStore.$reset()
+			$reset()
 			roundStore.$reset()
 			try {
 				const game = await pb.collection('games').getFirstListItem(`code = '${code}'`)
@@ -26,7 +25,7 @@ export const usePlayerStore = defineStore(
 					score: 0,
 				})
 
-				player.value = <Player>{ id: createdPlayer.id, name: createdPlayer.name }
+				player.value = <Player>{ id: createdPlayer.id, name: createdPlayer.name, has_voted: false }
 			} catch (err) {
 				console.log(err)
 			}
@@ -53,6 +52,9 @@ export const usePlayerStore = defineStore(
 							const i = players.value.findIndex((p) => p.id === e.record.id)
 							if (i !== -1) {
 								players.value[i] = e.record as unknown as Player
+							}
+							if (player.value && player.value.id === e.record.id) {
+								player.value = e.record as unknown as Player
 							}
 						}
 						if (e.action === 'delete') {

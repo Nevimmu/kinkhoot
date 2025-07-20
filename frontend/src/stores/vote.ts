@@ -15,14 +15,30 @@ export const useVoteStore = defineStore('vote', () => {
 
 	const createVote = async (votedForId: string) => {
 		try {
+			if (!playerStore.player) {
+				throw new Error('Player not set')
+			}
+
 			await pb.collection('votes').create({
 				game: gameStore.game?.id,
 				voter: playerStore.player?.id,
 				voted_for: votedForId,
 				round: roundStore.roundData?.id,
 			})
+
+			await pb.collection('players').update(playerStore.player.id, {
+				has_voted: true
+			}) 
 		} catch (err) {
 			console.error(err)
+		}
+	}
+
+	const _resetHasVoted = async () => {
+		for (const p of playerStore.players) {
+			await pb.collection('players').update(p.id, {
+				has_voted: false
+			})
 		}
 	}
 
@@ -39,6 +55,8 @@ export const useVoteStore = defineStore('vote', () => {
 			}
 
 			if (nbVotes === playerStore.players.length) {
+				// Reset the votes
+				await _resetHasVoted()
 				roundStore.newRound()
 			}
 		} catch (err) {
