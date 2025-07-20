@@ -41,15 +41,20 @@ export const useRoundStore = defineStore('round', () => {
 	}
 
 	const newRound = async () => {
-		if (gameRound.value == playerStore.players.length) {
-			// TODO: handle end of the game
-		}
-
 		try {
-			// Fetch the next round
 			if (!gameStore.game?.id) {
 				throw new Error("gameId isn't set")
 			}
+
+			if (gameRound.value == playerStore.players.length) {
+				console.log('End of the game')
+				await pb.collection('games').update(gameStore.game?.id, {
+					status: 'finished'
+				})
+				return
+			}
+
+			// Fetch the next round
 			const round = await pb
 				.collection('rounds')
 				.getFirstListItem(
