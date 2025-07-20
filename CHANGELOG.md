@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.1](https://github.com/Nevimmu/kinkhoot/compare/v0.0.0...v0.0.1) (2025-07-20)
+
+
+### Features
+
+* **frontend:** now with confetti! ([66f6963](https://github.com/Nevimmu/kinkhoot/commit/66f6963a2559d65fa60b81e10f0eb4d1ca59bffb))
+* **frontend:** show the release number on the homepage ([01963ef](https://github.com/Nevimmu/kinkhoot/commit/01963ef4551e9485c8ab171b77650f9fc3eff0ed))
+
+
+### Bug Fixes
+
+* **frontend:** fix checkPlayerName ([e1e990e](https://github.com/Nevimmu/kinkhoot/commit/e1e990e57ba197b1639804d4109952cd74552dec))
+
 ## 0.0.0 (2025-07-20)
 
 
