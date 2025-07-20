@@ -19,39 +19,43 @@ const disableJoin = ref(false)
 
 const formSchema = toTypedSchema(
 	z.object({
-		pin: z
-			.array(z.coerce.string())
-			.length(6)
-			.refine(async (pin: string[]) => {
-				const isValid = await gameStore.checkGameCode(pin.join(''))
-				return isValid
-			}),
-		username: z.string(),
-		url: z.string().url({ message: 'Invalid URL' }).includes('https://bdsmtest.org/r/'),
+		pin: z.array(z.coerce.string()).length(6, 'Pin must be 6 characters'),
+		username: z.string().min(2, 'Username must be at least 2 characters'),
+		url: z
+			.string()
+			.url({ message: 'Invalid URL' })
+			.includes('https://bdsmtest.org/r/', { message: 'URL must be from bdsmtest.org' }),
 	}),
 )
 
-const { handleSubmit, isFieldDirty, setFieldValue, meta } = useForm({
+const { handleSubmit, setFieldValue, meta, setFieldError } = useForm({
 	validationSchema: formSchema,
 })
 
 const onSubmit = handleSubmit(async (values) => {
 	disableJoin.value = true
 	try {
-		let code = values.pin.join('')
+		const code = values.pin.join('')
+		const isPinValid = await gameStore.checkGameCode(code)
+		if (!isPinValid) {
+			setFieldError('pin', 'Game not found or has already started.')
+			return
+		}
+
 		await playerStore.joinGame(values.username, values.url, code)
 
 		router.push(`/player/${code}`)
 	} catch (error) {
 		console.error(error)
+	} finally {
+		disableJoin.value = false
 	}
-	disableJoin.value = false
 })
 </script>
 
 <template>
 	<form @submit="onSubmit" class="grid gap-2">
-		<FormField v-slot="{ componentField }" name="username" :validate-on-blur="!isFieldDirty">
+		<FormField v-slot="{ componentField }" name="username">
 			<FormItem>
 				<FormLabel>Username</FormLabel>
 				<FormControl>
@@ -60,7 +64,7 @@ const onSubmit = handleSubmit(async (values) => {
 				</FormControl>
 			</FormItem>
 		</FormField>
-		<FormField v-slot="{ componentField }" name="url" :validate-on-blur="!isFieldDirty">
+		<FormField v-slot="{ componentField }" name="url">
 			<FormItem>
 				<FormLabel>BDSMtest url</FormLabel>
 				<FormControl>
@@ -69,7 +73,7 @@ const onSubmit = handleSubmit(async (values) => {
 				</FormControl>
 			</FormItem>
 		</FormField>
-		<FormField v-slot="{ componentField, value }" name="pin" :validate-on-blur="!isFieldDirty" -->
+		<FormField v-slot="{ componentField, value }" name="pin">
 			<FormItem>
 				<FormLabel>Game ID</FormLabel>
 				<FormControl>
@@ -89,7 +93,7 @@ const onSubmit = handleSubmit(async (values) => {
 							<PinInputSlot v-for="(id, index) in 6" :key="id" :index="index" />
 						</PinInputGroup>
 					</PinInput>
-					<ErrorMessage name="gameID" class="text-red-600" />
+					<ErrorMessage name="pin" class="text-red-600" />
 				</FormControl>
 			</FormItem>
 		</FormField>
