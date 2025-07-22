@@ -35,7 +35,7 @@ const { handleSubmit, setFieldValue, meta, setFieldError } = useForm({
 const onSubmit = handleSubmit(async (values) => {
 	disableJoin.value = true
 	try {
-		const code = values.pin.join('')
+		const code = values.pin.join('').toUpperCase()
 		const isPinValid = await gameStore.checkGameCode(code)
 		if (!isPinValid) {
 			setFieldError('pin', 'Game not found or has already started.')
@@ -96,7 +96,7 @@ const onSubmit = handleSubmit(async (values) => {
 						"
 					>
 						<PinInputGroup>
-							<PinInputSlot v-for="(id, index) in 6" :key="id" :index="index" />
+							<PinInputSlot v-for="(id, index) in 6" :key="id" :index="index" class="uppercase" />
 						</PinInputGroup>
 					</PinInput>
 					<ErrorMessage name="pin" class="text-red-600" />
