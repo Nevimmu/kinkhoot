@@ -15,7 +15,7 @@ export const useGameStore = defineStore(
 
 		const _generateRandomCode = (length: number) => {
 			let result = ''
-			const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+			const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 			const charactersLength = characters.length
 
 			for (let i = 0; i < length; i++) {

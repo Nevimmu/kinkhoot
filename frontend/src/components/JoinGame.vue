@@ -81,7 +81,7 @@ const onSubmit = handleSubmit(async (values) => {
 		</FormField>
 		<FormField v-slot="{ componentField, value }" name="pin">
 			<FormItem>
-				<FormLabel>Game ID</FormLabel>
+				<FormLabel>Game Code</FormLabel>
 				<FormControl>
 					<PinInput
 						id="pin-input"
