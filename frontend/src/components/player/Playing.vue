@@ -27,9 +27,10 @@ const vote = (playerId: string) => {
 </script>
 
 <template>
-	<span class="text-center text-xl">Round {{ roundStore.gameRound }} </span>
+	<span class="block text-center text-xl">Round {{ roundStore.gameRound }} </span>
 	<div class="flex flex-col gap-2 p-2">
 		<Button
+			class="p-8 text-2xl"
 			@click="vote(p.id)"
 			v-for="p in playerStore.players"
 			:key="p.name"
