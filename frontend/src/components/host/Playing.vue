@@ -17,7 +17,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<span class="text-center text-xl">Round {{ roundStore.gameRound }} </span>
+	<span class="block text-center text-3xl">Round {{ roundStore.gameRound }} </span>
 	<div class="w-lg">
 		<Results :results="roundStore.roundData?.results" />
 	</div>
