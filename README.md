@@ -1,6 +1,5 @@
 # Kinkhoot
-![Docker Image Version](https://img.shields.io/docker/v/nevimmu/kinkhoot?color=%232496ED)
-
+<a target="_blank" href="https://hub.docker.com/repository/docker/nevimmu/kinkhoot/general"><img src="https://img.shields.io/docker/v/nevimmu/kinkhoot?color=%232496ED" />
 
 Kinkhoot is a game where you guess your friends' BDSMtest
 
