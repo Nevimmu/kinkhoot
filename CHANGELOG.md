@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.2](https://github.com/Nevimmu/kinkhoot/compare/v0.0.1...v0.0.2) (2025-07-26)
+
+
+### Features
+
+* **backend:** delete a game if the status is "finished" for more than 5min ([bc78045](https://github.com/Nevimmu/kinkhoot/commit/bc78045c2dc918e1e352ba1ac4e8fed79c6ada6e))
+* **frontend:** pin input is now uppercase ([e09aec8](https://github.com/Nevimmu/kinkhoot/commit/e09aec850e1ccebf495dd11e526a8c2101794bf3))
+* **frontend:** removed numbers from the game code generation ([b437484](https://github.com/Nevimmu/kinkhoot/commit/b437484c189cba3e9e26c1e514564cff2db8e066))
+* **results:** added colors to the results ([0f67f84](https://github.com/Nevimmu/kinkhoot/commit/0f67f849a3d2f0b244f544708274266b36ecdaee))
+* **results:** center the round number ([4a6b022](https://github.com/Nevimmu/kinkhoot/commit/4a6b022691b630d662e86f221a0ecb2b32f7f40b))
+* **votes:** made the vote buttons bigger ([d5ca893](https://github.com/Nevimmu/kinkhoot/commit/d5ca893d7263e86a1653b7846dc1c303e2f0ce8c))
+
+
+### Bug Fixes
+
+* **results:** ensure players are displayed in the correct order on the final page ([8a0cab6](https://github.com/Nevimmu/kinkhoot/commit/8a0cab6f87dfd055a4a37096802c38e2801828fe))
+
 ## [0.0.1](https://github.com/Nevimmu/kinkhoot/compare/v0.0.0...v0.0.1) (2025-07-20)
 
 
