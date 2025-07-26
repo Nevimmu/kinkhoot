@@ -7,16 +7,24 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"backend/bdsmrequest"
 	_ "backend/migrations"
 
+	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 	"github.com/pocketbase/pocketbase/tools/hook"
+	"github.com/pocketbase/pocketbase/tools/types"
 )
+
+type Game struct {
+	Id      string         `db:"id" json:"id"`
+	Updated types.DateTime `db:"updated" json:"updated"`
+}
 
 func main() {
 	app := pocketbase.New()
@@ -56,6 +64,28 @@ func main() {
 		Priority: 999, // execute as latest as possible to allow users to provide their own route
 	})
 
+	app.Cron().MustAdd("hello", "0 * * * *", func() {
+		games := []Game{}
+		err := app.DB().Select("id", "updated").From("games").Where(dbx.NewExp("status = 'finished'")).All(&games)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		for _, game := range games {
+			if isOlderThan(game.Updated.Time(), 5*time.Minute) {
+				record, err := app.FindRecordById("games", game.Id)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				err = app.Delete(record)
+				if err != nil {
+					log.Fatal(err)
+				}
+			}
+		}
+	})
+
 	app.OnRecordAfterCreateSuccess("players").BindFunc(func(e *core.RecordEvent) error {
 		url := e.Record.Get("url")
 		parts := strings.Split(url.(string), "/")
@@ -86,4 +116,9 @@ func defaultPublicDir() string {
 	}
 
 	return filepath.Join(os.Args[0], "../pb_public")
+}
+
+func isOlderThan(t time.Time, duration time.Duration) bool {
+	threshold := time.Now().Add(-duration)
+	return t.Before(threshold)
 }
