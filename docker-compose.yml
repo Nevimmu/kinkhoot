@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  pokcetserve-dev:
+  dev:
     build:
       context: .
       target: dev
@@ -16,12 +16,10 @@ services:
     env_file:
       - .env
 
-  pokcetserve-prod:
+  prod:
     build:
       context: .
       target: prod
-      args:
-        BUILD_ENV: prod
     ports:
       - "8090:8090"
     env_file:
