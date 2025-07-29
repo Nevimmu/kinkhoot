@@ -35,7 +35,7 @@ const startGame = async () => {
 </script>
 
 <template>
-	<div class="flex flex-1 flex-col p-5 gap-4 w-full items-center justify-center">
+	<div class="flex flex-1 flex-col p-5 gap-4 w-full h-screen items-center justify-center">
 		<div v-if="gameStore.game?.status === 'waiting'">
 			<Waiting @start-game="startGame" />
 		</div>
